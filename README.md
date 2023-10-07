@@ -1,2 +1,2 @@
 # MCQ_Generator
-Generate Multiple Choice QUestions using NLP
+Generate Multiple Choice Questions using NLP
