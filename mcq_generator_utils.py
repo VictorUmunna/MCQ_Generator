@@ -26,7 +26,7 @@ nltk.download('punkt')
 nltk.download('popular')
 
 
-class feature_preprocessing():
+class mcq_generation():
     def __init__(self) -> None:
         pass
 
@@ -168,7 +168,7 @@ class feature_preprocessing():
     def get_distractors_wordnet(syn, word):
         """Gets distractors for a word from WordNet.
 
-        Args:  
+        Args:
             syn: A WordNet synset.
             word: A string.
 
@@ -195,14 +195,15 @@ class feature_preprocessing():
         for hypo in hyponyms:
             name = hypo.lemmas()[0].name()
             if name == actual_word:
-            continue
+                continue
 
             name = name.replace("_", " ")
             name = " ".join(w.capitalize() for w in name.split())
             if name not in distractors:
-            distractors.append(name)
+                distractors.append(name)
 
         return distractors
+
 
     
 
