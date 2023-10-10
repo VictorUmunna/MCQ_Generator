@@ -96,11 +96,7 @@ class feature_preprocessing():
         return sentences
 
 
-        sentences = split_text_to_sentences(text)
-        print(sentences)
-
-
-
+        
     # Map the sentences which contain the keywords to the related keywords
     def map_sentences_to_keywords(words, sentences):
             
@@ -172,7 +168,7 @@ class feature_preprocessing():
     def get_distractors_wordnet(syn, word):
         """Gets distractors for a word from WordNet.
 
-        Args:
+        Args:  
             syn: A WordNet synset.
             word: A string.
 
@@ -199,14 +195,15 @@ class feature_preprocessing():
         for hypo in hyponyms:
             name = hypo.lemmas()[0].name()
             if name == actual_word:
-                continue
+            continue
 
             name = name.replace("_", " ")
             name = " ".join(w.capitalize() for w in name.split())
             if name not in distractors:
-                distractors.append(name)
+            distractors.append(name)
 
         return distractors
+
     
 
 
@@ -220,12 +217,11 @@ class feature_preprocessing():
             A list of distractor words.
         """
 
-        # Convert the word to lowercase and store the original word in `actual_word`.
         word = word.lower()
         actual_word = word
 
-        # Replace any underscores in the word with spaces. This will ensure that compound sentences are handled correctly.
-        word = word.replace("_", " ")
+        if len(word.split()) > 0:
+            word = word.replace(" ", "_")
 
         distractors = []
 
@@ -261,42 +257,43 @@ class feature_preprocessing():
                 # Get the word from the edge.
                 word2 = edge["start"]["label"]
 
-                # If the word is not already in the list of distractors and is different from the actual word, add it to the list.
-                if word2 not in distractors and actual_word.lower() not in word2.lower():
-                    distractors.append(word2)
+            # If the word is not already in the list of distractors and is different from the actual word, add it to the list.
+            if word2 not in distractors and actual_word.lower() not in word2.lower():
+                distractors.append(word2)
 
         # Return the list of distractors.
         return distractors
+
     
 
 
     #
     mapped_distractors = {}
-for keyword in mapped_sentences:
-    # Get the word sense of the keyword.
-    word_sense = get_word_sense(mapped_sentences[keyword][0], keyword)
+    for keyword in mapped_sentences:
+        # Get the word sense of the keyword.
+        word_sense = self.get_word_sense(self.mapped_sentences[keyword][0], keyword)
 
-    # If there is a word sense, then get the WordNet distractors.
-    if word_sense:
-        distractors = get_distractors_wordnet(word_sense, keyword)
+        # If there is a word sense, then get the WordNet distractors.
+        if word_sense:
+            distractors = self.get_distractors_wordnet(word_sense, keyword)
 
-        # If there are no WordNet distractors, then get the ConceptNet distractors.
-        if len(distractors) == 0:
+            # If there are no WordNet distractors, then get the ConceptNet distractors.
+            if len(distractors) == 0:
+                distractors = self.get_distractors_conceptnet(keyword)
+
+            # If there are any distractors, then map them to the keyword.
+            if len(distractors) != 0:
+                self.mapped_distractors[keyword] = distractors
+
+        # If there is no word sense, then directly search for and map the ConceptNet distractors.
+        else:
             distractors = get_distractors_conceptnet(keyword)
 
-        # If there are any distractors, then map them to the keyword.
-        if len(distractors) != 0:
-            mapped_distractors[keyword] = distractors
-
-    # If there is no word sense, then directly search for and map the ConceptNet distractors.
-    else:
-        distractors = get_distractors_conceptnet(keyword)
-
-        # If there are any distractors, then map them to the keyword.
-        if len(distractors) > 0:
-            mapped_distractors[keyword] = distractors
-# Print the mapped distractors.
-print(mapped_distractors)
+            # If there are any distractors, then map them to the keyword.
+            if len(distractors) > 0:
+                mapped_distractors[keyword] = distractors
+    # Print the mapped distractors.
+    print(mapped_distractors)
 
 
 
