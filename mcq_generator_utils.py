@@ -39,7 +39,7 @@ class mcq_generation():
 
     
     # extract the important words(keywords) from the text article
-    def extract_keywords(article: str) -> list[str]:
+    def extract_keywords(self, article: str) -> list[str]:
         """Extracts keywords  from an article using the MultipartiteRank algorithm.
 
         Args:
@@ -79,7 +79,7 @@ class mcq_generation():
 
 
     # Split the whole text article into an array/list of individual sentences.
-    def split_text_to_sentences(article: str) -> list[str]:
+    def split_text_to_sentences(self, article: str) -> list[str]:
         """Splits a text article into a list of individual sentences.
 
         Args:
@@ -98,7 +98,7 @@ class mcq_generation():
 
         
     # Map the sentences which contain the keywords to the related keywords
-    def map_sentences_to_keywords(words, sentences):
+    def map_sentences_to_keywords(self, words, sentences):
             
         """
         Maps the sentences which contain the keywords to the related keywords.
@@ -131,7 +131,7 @@ class mcq_generation():
 
 
     # Get the sense of the word
-    def get_word_sense(sentence, word):
+    def get_word_sense(self, sentence, word):
         """
         Returns the most likely sense of a word in a given context.
 
@@ -165,7 +165,7 @@ class mcq_generation():
 
 
     # 
-    def get_distractors_wordnet(syn, word):
+    def get_distractors_wordnet(self, syn, word):
         """Gets distractors for a word from WordNet.
 
         Args:
@@ -208,7 +208,7 @@ class mcq_generation():
     
 
 
-    def get_distractors_conceptnet(word):
+    def get_distractors_conceptnet(self, word):
         """Gets distractors for a word from ConceptNet.
 
         Args:
@@ -268,33 +268,83 @@ class mcq_generation():
     
 
 
-    #
-    mapped_distractors = {}
-    for keyword in mapped_sentences:
-        # Get the word sense of the keyword.
-        word_sense = self.get_word_sense(self.mapped_sentences[keyword][0], keyword)
+    # map the distractors to keywords
+    def map_distractors(self, mapped_sentence, words_sense, distractors_wordnet, distractors_conceptnet):
+        mapped_distractors = {}
+        for keyword in mapped_sentence:
+            # Get the word sense of the keyword.
+            word_sense = words_sense(mapped_sentence[keyword][0], keyword)
 
-        # If there is a word sense, then get the WordNet distractors.
-        if word_sense:
-            distractors = self.get_distractors_wordnet(word_sense, keyword)
+            # If there is a word sense, then get the WordNet distractors.
+            if word_sense:
+                distractors = distractors_wordnet(word_sense, keyword)
 
-            # If there are no WordNet distractors, then get the ConceptNet distractors.
-            if len(distractors) == 0:
-                distractors = self.get_distractors_conceptnet(keyword)
+                # If there are no WordNet distractors, then get the ConceptNet distractors.
+                if len(distractors) == 0:
+                    distractors = distractors_conceptnet(keyword)
 
-            # If there are any distractors, then map them to the keyword.
-            if len(distractors) != 0:
-                self.mapped_distractors[keyword] = distractors
+                # If there are any distractors, then map them to the keyword.
+                if len(distractors) != 0:
+                    mapped_distractors[keyword] = distractors
 
-        # If there is no word sense, then directly search for and map the ConceptNet distractors.
-        else:
-            distractors = get_distractors_conceptnet(keyword)
+            # If there is no word sense, then directly search for and map the ConceptNet distractors.
+            else:
+                distractors = distractors_conceptnet(keyword)
 
-            # If there are any distractors, then map them to the keyword.
-            if len(distractors) > 0:
-                mapped_distractors[keyword] = distractors
-    # Print the mapped distractors.
-    print(mapped_distractors)
+                # If there are any distractors, then map them to the keyword.
+                if len(distractors) > 0:
+                    mapped_distractors[keyword] = distractors
+        # Print the mapped distractors.
+        return mapped_distractors
+    
+
+
+    # print result
+    def print_result(self, mapped_distractor, mapped_sentence):
+        """Prints the multiple choice questions to the console.
+
+        Args:
+            mapped_distractors: A dictionary mapping keywords to distractors.
+            mapped_sentences: A dictionary mapping keywords to sentences that contain the keywords.
+        """
+
+        print("**************************************        Multiple Choice Questions        *******************************")
+        print()
+
+        import re
+        import random
+
+        iterator = 1  # To keep the count of the questions
+
+        for keyword in mapped_distractor:
+            # Get the first sentence from the set of sentences.
+            sentence = mapped_sentence[keyword][0]
+
+            pattern = re.compile(keyword, re.IGNORECASE)  # Converts into regular expression for pattern matching
+            option_string = pattern.sub("________", sentence)  # Replaces the keyword with underscores(blanks)
+
+            # Prints the question along with a question number
+            print(f"Question {iterator}: {option_string}")
+
+            # Capitalizes the options and selects only 4 options
+            options = [keyword.capitalize()]
+            for distractor in mapped_distractor[keyword]:
+                options.append(distractor)
+                if len(options) == 4:
+                    break
+
+            # Shuffles the options so that order is not always same
+            random.shuffle(options)
+
+            # Prints the options
+            opts = ['a', 'b', 'c', 'd']
+            for i, option in enumerate(options):
+                if i < len(opts):
+                    print(f"\t{opts[i]}) {option}")
+
+            print()
+            iterator += 1  # Increase the counter
+
 
 
 
