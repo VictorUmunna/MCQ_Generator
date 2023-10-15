@@ -1,7 +1,7 @@
 import streamlit as st
 from mcq_generator_utils import mcq_generation
 
-st.header('AUTOMATED MULTIPLE CHOICeS QUESTION GENERATOR')
+st.header('AUTOMATED MULTIPLE CHOICE QUESTION GENERATOR')
 st.subheader('Generates questions from your text article')
 
 #upload the text file

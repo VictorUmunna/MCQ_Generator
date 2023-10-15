@@ -60,8 +60,8 @@ class mcq_generation():
         # Select the longest sequences of nouns and adjectives, that do not
         # contain punctuation marks or stopwords as candidates.
         
-        #pos = {'NOUN', 'PROPN', 'ADJ'}
-        pos = {'PROPN'}
+        pos = {'NOUN', 'PROPN', 'ADJ'}
+        #pos = {'PROPN'}
         extractor.candidate_selection(pos=pos)
 
         # Build the Multipartite graph.
@@ -300,7 +300,7 @@ class mcq_generation():
 
 
     # print result
-    def print_result(self, mapped_distractor, mapped_sentence):
+    def print_result(self, mapped_distractors, mapped_sentences):
         """Prints the multiple choice questions to the console.
 
         Args:
@@ -308,42 +308,50 @@ class mcq_generation():
             mapped_sentences: A dictionary mapping keywords to sentences that contain the keywords.
         """
 
-        print("**************************************        Multiple Choice Questions        *******************************")
-        print()
-
-        import re
-        import random
+        # Initialize a Boolean variable to track whether the header has been printed.
+        header_printed = False
 
         iterator = 1  # To keep the count of the questions
 
-        for keyword in mapped_distractor:
+        # Create a list to store the questions.
+        questions = []
+
+        for keyword in mapped_distractors:
             # Get the first sentence from the set of sentences.
-            sentence = mapped_sentence[keyword][0]
+            sentence = mapped_sentences[keyword][0]
 
             pattern = re.compile(keyword, re.IGNORECASE)  # Converts into regular expression for pattern matching
             option_string = pattern.sub("________", sentence)  # Replaces the keyword with underscores(blanks)
 
-            # Prints the question along with a question number
-            print(f"Question {iterator}: {option_string}")
+            # Create a multiple choice question dictionary.
+            question = {
+            "question": option_string,
+            "options": [keyword.capitalize()] + [distractor for distractor in mapped_distractors[keyword]],
+            "answer": keyword.capitalize()
+            }
 
-            # Capitalizes the options and selects only 4 options
-            options = [keyword.capitalize()]
-            for distractor in mapped_distractor[keyword]:
-                options.append(distractor)
-                if len(options) == 4:
-                    break
+            # Add the question to the list of questions.
+            questions.append(question)
 
-            # Shuffles the options so that order is not always same
-            random.shuffle(options)
+        # Prints the header if it has not already been printed.
+        if not header_printed:
+            print("************************************** Multiple Choice Questions *******************************")
+            header_printed = True
 
-            # Prints the options
+        # Print the questions.
+        for question in questions:
+            print(f"Question {iterator}: {question['question']}")
+            iterator += 1
+
+            # Shuffle the options and print them.
+            random.shuffle(question['options'])
             opts = ['a', 'b', 'c', 'd']
-            for i, option in enumerate(options):
+            for i, option in enumerate(question['options']):
                 if i < len(opts):
                     print(f"\t{opts[i]}) {option}")
 
             print()
-            iterator += 1  # Increase the counter
+            
 
 
 
