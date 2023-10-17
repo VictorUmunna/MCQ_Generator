@@ -9,6 +9,7 @@ from pywsd.lesk import cosine_lesk
 from nltk.corpus import wordnet
 from typing_extensions import TypeAlias
 from nltk.corpus import stopwords
+import streamlit as st
 import nltk
 import pke
 import string
@@ -301,20 +302,10 @@ class mcq_generation():
 
     # print result
     def print_result(self, mapped_distractors, mapped_sentences):
-        """Prints the multiple choice questions to the console.
 
-        Args:
-            mapped_distractors: A dictionary mapping keywords to distractors.
-            mapped_sentences: A dictionary mapping keywords to sentences that contain the keywords.
-        """
-
-        # Initialize a Boolean variable to track whether the header has been printed.
         header_printed = False
 
         iterator = 1  # To keep the count of the questions
-
-        # Create a list to store the questions.
-        questions = []
 
         for keyword in mapped_distractors:
             # Get the first sentence from the set of sentences.
@@ -323,34 +314,33 @@ class mcq_generation():
             pattern = re.compile(keyword, re.IGNORECASE)  # Converts into regular expression for pattern matching
             option_string = pattern.sub("________", sentence)  # Replaces the keyword with underscores(blanks)
 
-            # Create a multiple choice question dictionary.
-            question = {
-            "question": option_string,
-            "options": [keyword.capitalize()] + [distractor for distractor in mapped_distractors[keyword]],
-            "answer": keyword.capitalize()
-            }
+            # Prints the header if it has not already been printed.
+            if not header_printed:
+                st.write("*************************************** Multiple Choice Questions ***************************************")
+                header_printed = True
 
-            # Add the question to the list of questions.
-            questions.append(question)
+            # Prints the question along with a question number
+            st.write(f"Question {iterator}: {option_string}")
 
-        # Prints the header if it has not already been printed.
-        if not header_printed:
-            print("************************************** Multiple Choice Questions *******************************")
-            header_printed = True
+            # Capitalizes the options and selects only 4 options
+            options = [keyword.capitalize()]
+            for distractor in mapped_distractors[keyword]:
+                options.append(distractor)
+                if len(options) == 4:
+                    break
 
-        # Print the questions.
-        for question in questions:
-            print(f"Question {iterator}: {question['question']}")
-            iterator += 1
+            # Shuffles the options so that order is not always same
+            random.shuffle(options)
 
-            # Shuffle the options and print them.
-            random.shuffle(question['options'])
-            opts = ['a', 'b', 'c', 'd']
-            for i, option in enumerate(question['options']):
+            # Prints the options
+            opts=['a','b','c','d']
+            for i, option in enumerate(options):
                 if i < len(opts):
-                    print(f"\t{opts[i]}) {option}")
+                    st.write(f"\t{opts[i]}) {option}")
 
-            print()
+            st.write()
+            iterator += 1  # Increase the counter
+            st.write()
             
 
 

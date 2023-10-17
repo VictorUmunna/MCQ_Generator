@@ -2,7 +2,7 @@ import streamlit as st
 from mcq_generator_utils import mcq_generation
 
 
-st.title('AUTOMATED MULTIPLE CHOICE QUESTION GENERATOR')
+st.title('Automated Multiple Choice Question Generator')
 st.sidebar.title('Upload')
 
 # File upload widget
