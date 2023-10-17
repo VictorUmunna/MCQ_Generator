@@ -300,10 +300,10 @@ class mcq_generation():
     
 
 
-    # print result
+# print result
     def print_result(self, mapped_distractors, mapped_sentences):
-
         header_printed = False
+        mcq_output = []
 
         iterator = 1  # To keep the count of the questions
 
@@ -311,16 +311,16 @@ class mcq_generation():
             # Get the first sentence from the set of sentences.
             sentence = mapped_sentences[keyword][0]
 
-            pattern = re.compile(keyword, re.IGNORECASE)  # Converts into regular expression for pattern matching
-            option_string = pattern.sub("________", sentence)  # Replaces the keyword with underscores(blanks)
+            pattern = re.compile(keyword, re.IGNORECASE)  # Converts into a regular expression for pattern matching
+            option_string = pattern.sub("________", sentence)  # Replaces the keyword with underscores (blanks)
 
             # Prints the header if it has not already been printed.
             if not header_printed:
-                st.write("*************************************** Multiple Choice Questions ***************************************")
+                mcq_output.append("*************************************** Multiple Choice Questions ***************************************")
                 header_printed = True
 
-            # Prints the question along with a question number
-            st.write(f"Question {iterator}: {option_string}")
+            # Add the question along with a question number to the output list
+            mcq_output.append(f"Question {iterator}: {option_string}")
 
             # Capitalizes the options and selects only 4 options
             options = [keyword.capitalize()]
@@ -329,18 +329,22 @@ class mcq_generation():
                 if len(options) == 4:
                     break
 
-            # Shuffles the options so that order is not always same
+            # Shuffles the options so that the order is not always the same
             random.shuffle(options)
 
-            # Prints the options
-            opts=['a','b','c','d']
+            # Add the options to the output list
+            opts = ['a', 'b', 'c', 'd']
             for i, option in enumerate(options):
                 if i < len(opts):
-                    st.write(f"\t{opts[i]}) {option}")
+                    mcq_output.append(f"\t{opts[i]}) {option}")
 
-            st.write()
+            mcq_output.append("")
             iterator += 1  # Increase the counter
-            st.write()
+            mcq_output.append("")
+
+        # Return the MCQs as a string
+        return "\n".join(mcq_output)
+
             
 
 
