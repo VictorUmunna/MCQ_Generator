@@ -33,6 +33,14 @@ class mcq_generation():
 
     # read the text data
     def read_data(self, filepath):
+        """Read the text in a file path.
+
+        Args:
+            filepath: The path of the file.
+
+        Returns:
+            A text file
+        """        
         file=open(filepath, encoding = 'unicode_escape')
         text=file.read().strip()
         return text
@@ -69,7 +77,7 @@ class mcq_generation():
         extractor.candidate_weighting()
 
         # Get the 25-highest scored candidates as keyphrases.
-        keyphrases = extractor.get_n_best(n=25)
+        keyphrases = extractor.get_n_best(n=30)
 
         keywords = []
         for phrases in keyphrases:
@@ -300,7 +308,8 @@ class mcq_generation():
     
 
 
-# print result
+
+    # print result
     def print_result(self, mapped_distractors, mapped_sentences):
         header_printed = False
         mcq_output = []
@@ -332,18 +341,18 @@ class mcq_generation():
             # Shuffles the options so that the order is not always the same
             random.shuffle(options)
 
-            # Add the options to the output list
+            # Add the options to the output list with each option on a new line
             opts = ['a', 'b', 'c', 'd']
             for i, option in enumerate(options):
                 if i < len(opts):
                     mcq_output.append(f"\t{opts[i]}) {option}")
 
-            mcq_output.append("")
+            mcq_output.append("")  # Add an empty line between questions
             iterator += 1  # Increase the counter
-            mcq_output.append("")
 
         # Return the MCQs as a string
         return "\n".join(mcq_output)
+
 
             
 
