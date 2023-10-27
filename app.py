@@ -1,5 +1,9 @@
 import streamlit as st
 import nltk
+nltk.download("popular")
+nltk.download('stopwords')
+nltk.download('punkt')
+
 from mcq_generator_utils import mcq_generation
 import io
 
