@@ -1,5 +1,6 @@
 #Importing the needed files and packages
 
+import nltk
 from nltk.tokenize import sent_tokenize
 from flashtext import KeywordProcessor
 from pywsd.similarity import max_similarity
