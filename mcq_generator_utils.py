@@ -1,6 +1,11 @@
 #Importing the needed files and packages
 
 import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('popular')
+
+
 from nltk.tokenize import sent_tokenize
 from flashtext import KeywordProcessor
 from pywsd.similarity import max_similarity
@@ -21,11 +26,6 @@ import random
 import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
-
-
-nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('popular')
 
 
 class mcq_generation():
