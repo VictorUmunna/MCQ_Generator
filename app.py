@@ -1,4 +1,5 @@
 import streamlit as st
+import nltk
 from mcq_generator_utils import mcq_generation
 import io
 
