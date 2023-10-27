@@ -29,25 +29,6 @@ warnings.filterwarnings('ignore')
 
 
 class mcq_generation():
-    def __init__(self) -> None:
-        pass
-
-    # read the text data
-    def read_data(self, filepath):
-        """Read the text in a file path.
-
-        Args:
-            filepath: The path of the file.
-
-        Returns:
-            A text file
-        """        
-        file=open(filepath, encoding = 'unicode_escape')
-        text=file.read().strip()
-        return text
-    
-
-    
     # extract the important words(keywords) from the text article
     def extract_keywords(self, article: str) -> list[str]:
         """Extracts keywords  from an article using the MultipartiteRank algorithm.
