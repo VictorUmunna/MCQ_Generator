@@ -307,8 +307,10 @@ class mcq_generation():
 
             # Prints the header if it has not already been printed.
             if not header_printed:
-                mcq_output.append("*************************************** Multiple Choice Questions ***************************************")
+                mcq_output.append("MULTIPLE CHOICE QUESTIONS")
                 header_printed = True
+
+            mcq_output.append("")
 
             # Add the question along with a question number to the output list
             mcq_output.append(f"Question {iterator}: {option_string}")
@@ -327,9 +329,9 @@ class mcq_generation():
             opts = ['a', 'b', 'c', 'd']
             for i, option in enumerate(options):
                 if i < len(opts):
-                    mcq_output.append(f"\t{opts[i]}) {option}")
+                    mcq_output.append(f"\n{opts[i]}) {option}")
 
-            mcq_output.append("")  # Add an empty line between questions
+            mcq_output.append("") # Add an empty line between questions
             iterator += 1  # Increase the counter
 
         # Return the MCQs as a string

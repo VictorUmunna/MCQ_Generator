@@ -37,7 +37,7 @@ if file is not None:
         generated_mcqs = mcq_generator.print_result(mapped_distractors, mapped_sentences)
 
         # Display the generated MCQs
-        st.text(generated_mcqs)
+        st.markdown(generated_mcqs)
 
         st.sidebar.title('Download :arrow_double_down:')
 
