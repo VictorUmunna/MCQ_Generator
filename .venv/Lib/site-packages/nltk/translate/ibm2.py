@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # Natural Language Toolkit: IBM Model 2
 #
 # Copyright (C) 2001-2013 NLTK Project
 # Authors: Chin Yee Lee, Hengfeng Li, Ruxin Hou, Calvin Tanujaya Lim
-# URL: <http://nltk.org/>
+# URL: <https://www.nltk.org/>
 # For license information, see LICENSE.TXT
 
 """
@@ -14,29 +13,33 @@ An alignment probability is introduced, a(i | j,l,m), which predicts
 a source word position, given its aligned target word's position.
 
 The EM algorithm used in Model 2 is:
-E step - In the training data, collect counts, weighted by prior
+
+:E step: In the training data, collect counts, weighted by prior
          probabilities.
-         (a) count how many times a source language word is translated
-             into a target language word
-         (b) count how many times a particular position in the source
-             sentence is aligned to a particular position in the target
-             sentence
 
-M step - Estimate new probabilities based on the counts from the E step
+         - (a) count how many times a source language word is translated
+               into a target language word
+         - (b) count how many times a particular position in the source
+               sentence is aligned to a particular position in the target
+               sentence
 
+:M step: Estimate new probabilities based on the counts from the E step
 
-Notations:
-i: Position in the source sentence
-    Valid values are 0 (for NULL), 1, 2, ..., length of source sentence
-j: Position in the target sentence
-    Valid values are 1, 2, ..., length of target sentence
-l: Number of words in the source sentence, excluding NULL
-m: Number of words in the target sentence
-s: A word in the source language
-t: A word in the target language
+Notations
+---------
 
+:i: Position in the source sentence
+     Valid values are 0 (for NULL), 1, 2, ..., length of source sentence
+:j: Position in the target sentence
+     Valid values are 1, 2, ..., length of target sentence
+:l: Number of words in the source sentence, excluding NULL
+:m: Number of words in the target sentence
+:s: A word in the source language
+:t: A word in the target language
 
-References:
+References
+----------
+
 Philipp Koehn. 2010. Statistical Machine Translation.
 Cambridge University Press, New York.
 
@@ -49,10 +52,7 @@ Translation: Parameter Estimation. Computational Linguistics, 19 (2),
 import warnings
 from collections import defaultdict
 
-from nltk.translate import AlignedSent
-from nltk.translate import Alignment
-from nltk.translate import IBMModel
-from nltk.translate import IBMModel1
+from nltk.translate import AlignedSent, Alignment, IBMModel, IBMModel1
 from nltk.translate.ibm_model import Counts
 
 
@@ -79,8 +79,8 @@ class IBMModel2(IBMModel):
     >>> print(round(ibm2.translation_table['ja'][None], 3))
     0.0
 
-    >>> print(ibm2.alignment_table[1][1][2][2])
-    0.938...
+    >>> print(round(ibm2.alignment_table[1][1][2][2], 3))
+    0.939
     >>> print(round(ibm2.alignment_table[1][2][2][2], 3))
     0.0
     >>> print(round(ibm2.alignment_table[2][2][4][5], 3))
@@ -118,7 +118,7 @@ class IBMModel2(IBMModel):
             See ``IBMModel`` for the type and purpose of these tables.
         :type probability_tables: dict[str]: object
         """
-        super(IBMModel2, self).__init__(sentence_aligned_corpus)
+        super().__init__(sentence_aligned_corpus)
 
         if probability_tables is None:
             # Get translation probabilities from IBM Model 1
@@ -302,7 +302,7 @@ class Model2Counts(Counts):
     """
 
     def __init__(self):
-        super(Model2Counts, self).__init__()
+        super().__init__()
         self.alignment = defaultdict(
             lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: 0.0)))
         )
