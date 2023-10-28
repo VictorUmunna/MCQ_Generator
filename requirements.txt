@@ -1,9 +1,4 @@
-flashtext==2.7
-nltk==3.8.1
-pandas==2.1.2
-pke==2.0.0
-pywsd==1.2.5
-Requests==2.31.0
-streamlit==1.27.2
 streamlit==1.28.0
-typing_extensions==4.8.0
+flashtext==2.7
+pywsd==1.2.5
+git+https://github.com/boudinfl/pke.git
