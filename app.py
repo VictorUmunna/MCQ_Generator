@@ -1,5 +1,7 @@
 import streamlit as st
 import nltk
+import spacy
+spacy.load('en')
 nltk.download("popular")
 nltk.download('stopwords')
 nltk.download('punkt')
