@@ -1,7 +1,5 @@
 import streamlit as st
 import nltk
-import spacy
-spacy.load('en')
 nltk.download("popular")
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -26,7 +24,7 @@ if file is not None:
 
     # Generate MCQs
     if st.sidebar.button('Generate MCQs'):
-        st.subheader('Generated MCQs:')
+        st.subheader('MULTIPLE CHOICE QUESTIONS:')
         keywords = mcq_generator.extract_keywords(text)
         sentences = mcq_generator.split_text_to_sentences(text)
         mapped_sentences = mcq_generator.map_sentences_to_keywords(keywords, sentences)

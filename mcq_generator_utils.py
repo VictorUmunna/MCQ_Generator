@@ -319,7 +319,7 @@ class mcq_generation():
 
             # Prints the header if it has not already been printed.
             if not header_printed:
-                mcq_output.append("*************************************** Multiple Choice Questions ***************************************")
+                mcq_output.append("***********************************************************************************************")
                 header_printed = True
 
             mcq_output.append("")
