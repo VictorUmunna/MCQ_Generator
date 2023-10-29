@@ -1,4 +1,5 @@
-git+https://github.com/boudinfl/pke.gitstreamlit==1.28.0
+git+https://github.com/boudinfl/pke.git
+streamlit==1.28.0
 flashtext==2.7
 Requests==2.31.0
 pywsd==1.2.5
